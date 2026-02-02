@@ -1,9 +1,5 @@
-const { add } = require('./add');
+function add(...numbers) {
+  return numbers.reduce((a, c) => (a += c), 0);
+}
 
-test('add two numbers', () => {
-  expect(add(1, 1)).toBe(2);
-});
-
-test('add multiple numbers', () => {
-  expect(add(1, 2, 3, 4, 5)).toBe(2);
-});
+module.exports = { add };
