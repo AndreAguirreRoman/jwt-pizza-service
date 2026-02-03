@@ -1,7 +1,9 @@
 const request = require('supertest');
 const app = require('../service');
+const { authRouter } = require('./authRouter');
 
 const testUser = { name: 'pizza diner', email: 'reg@test.com', password: 'a' };
+const testUserInvalid = { name: 'pizza diner', email: null , password: 'a' };
 let testUserAuthToken;
 
 beforeAll(async () => {
@@ -19,6 +21,12 @@ test('login', async () => {
   const expectedUser = { ...testUser, roles: [{ role: 'diner' }] };
   delete expectedUser.password;
   expect(loginRes.body.user).toMatchObject(expectedUser);
+});
+
+test('register invalid', async () => {
+  const registerRes = await request(app).post('/api/auth').send({name:"wrong", email:"wrong@wrong.com"});
+  expect(registerRes.status).toBe(400);
+  expect(registerRes.body.token).toBeUndefined();
 });
 
 function expectValidJwt(potentialJwt) {
@@ -44,4 +52,21 @@ test('logout with token succeeds', async () => {
 
   expect(res.status).toBe(200);
   expect(res.body).toHaveProperty('message', 'logout successful');
+});
+
+
+
+test('req.user is missing', () => {
+  const req = {};
+  const res = {
+    status: jest.fn().mockReturnThis(),
+    send: jest.fn(),
+  };
+  const next = jest.fn();
+
+  authRouter.authenticateToken(req, res, next);
+
+  expect(res.status).toHaveBeenCalledWith(401);
+  expect(res.send).toHaveBeenCalledWith({ message: 'unauthorized' });
+  expect(next).not.toHaveBeenCalled();
 });
