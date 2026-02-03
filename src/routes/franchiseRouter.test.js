@@ -31,7 +31,7 @@ beforeAll(async () => {
     expect(token).toBeDefined();
 
     let admin = await createAdminUser();
-    const adminLoginRes = await request(app).put('/api/auth').send(admin);
+    const adminLoginRes = await request(app).put('/api/auth').send({email: admin.email, password: admin.password});
     adminToken = adminLoginRes.body.token;
     expect(adminToken).toBeDefined();
 
