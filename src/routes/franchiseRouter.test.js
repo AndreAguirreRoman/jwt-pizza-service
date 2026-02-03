@@ -29,6 +29,7 @@ beforeAll(async () => {
     const registerRes = await request(app).post('/api/auth').send(user);
     token = registerRes.body.token;
     expect(token).toBeDefined();
+
     let admin = await createAdminUser();
     const adminLoginRes = await request(app).put('/api/auth').send(admin);
     adminToken = adminLoginRes.body.token;
@@ -37,7 +38,7 @@ beforeAll(async () => {
     const franchiseRes = await request(app)
     .post('/api/franchise')
     .set('Authorization', `Bearer ${adminToken}`)
-    .send({ name: `fr-${Date.now()}`, admins: [{ email: 'a@jwt.com' }] });
+    .send({ name: `fr-${Date.now()}`, admins: [{ email: admin.email }] });
 
     franchiseId = franchiseRes.body.id;
     expect(franchiseId).toBeDefined();
