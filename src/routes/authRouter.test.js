@@ -3,7 +3,6 @@ const app = require('../service');
 const { authRouter } = require('./authRouter');
 
 const testUser = { name: 'pizza diner', email: 'reg@test.com', password: 'a' };
-const testUserInvalid = { name: 'pizza diner', email: null , password: 'a' };
 let testUserAuthToken;
 
 beforeAll(async () => {

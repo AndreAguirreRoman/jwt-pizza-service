@@ -3,7 +3,12 @@ const app = require('../service');
 
 const testUser = { name: 'pizza diner', email: 'reg@test.com', password: 'a' };
 const admin = {email: 'a@jwt.com', password: 'admin'};
+
 let token;
+
+let franchiseId;
+let storeId;
+let menuId;
 
 beforeAll(async () =>{
     testUser.email = Math.random().toString(36).substring(2,12) + '@test.com';
@@ -17,6 +22,29 @@ beforeAll(async () =>{
 
   adminToken = adminLoginRes.body.token;
   expect(adminToken).toBeDefined();
+
+
+  const menuRes = await request(app)
+    .put('/api/order/menu')
+    .set('Authorization', `Bearer ${adminToken}`)
+    .send({ title: 'TestPizza', description: 't', image: 'x.png', price: 0.01 });
+
+  const last = menuRes.body[menuRes.body.length - 1];
+  menuId = last.id;
+
+  const franchiseRes = await request(app)
+    .post('/api/franchise')
+    .set('Authorization', `Bearer ${adminToken}`)
+    .send({ name: `Fr-${Date.now()}`, admins: [{ email: 'a@jwt.com' }] });
+
+  franchiseId = franchiseRes.body.id;
+
+  const storeRes = await request(app)
+    .post(`/api/franchise/${franchiseId}/store`)
+    .set('Authorization', `Bearer ${adminToken}`)
+    .send({ name: `S-${Date.now()}` });
+
+  storeId = storeRes.body.id;
 });
 
 test("GET menu", async () =>{
@@ -55,3 +83,23 @@ test("UPDATE menu item authorized (admin)", async () =>{
         expect(item).toHaveProperty('description')
     }
 })
+
+test("POST create order", async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+        ok: true,
+        json: async () => ({ jwt: 'fake', reportUrl: 'http://example.com' }),
+    });
+
+    const order = {
+        franchiseId,
+        storeId,
+        items: [{ menuId, description: 'TestPizza', price: 0.01 }],
+    };
+
+    const res = await request(app)
+        .post('/api/order')
+        .set('Authorization', `Bearer ${token}`)
+        .send(order);
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty('order');
+});
