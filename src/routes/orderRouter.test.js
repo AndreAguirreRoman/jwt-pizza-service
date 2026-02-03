@@ -4,6 +4,7 @@ const app = require('../service');
 const testUser = { name: 'pizza diner', email: 'reg@test.com', password: 'a' };
 const admin = {email: 'a@jwt.com', password: 'admin'};
 
+let adminToken;
 let token;
 
 let franchiseId;
