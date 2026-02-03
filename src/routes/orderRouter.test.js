@@ -40,14 +40,6 @@ beforeAll(async () =>{
   expect(adminToken).toBeDefined();
 
 
-  const menuRes = await request(app)
-    .put('/api/order/menu')
-    .set('Authorization', `Bearer ${adminToken}`)
-    .send({ title: 'TestPizza', description: 't', image: 'x.png', price: 0.01 });
-
-  const last = menuRes.body[menuRes.body.length - 1];
-  menuId = last.id;
-
   const franchiseRes = await request(app)
     .post('/api/franchise')
     .set('Authorization', `Bearer ${adminToken}`)
@@ -61,6 +53,14 @@ beforeAll(async () =>{
     .send({ name: `S-${Date.now()}` });
 
   storeId = storeRes.body.id;
+
+  const menuRes = await request(app)
+    .put('/api/order/menu')
+    .set('Authorization', `Bearer ${adminToken}`)
+    .send({ title: 'TestPizza', description: 't', image: 'x.png', price: 0.01 });
+
+  const last = menuRes.body[menuRes.body.length - 1];
+  menuId = last.id;
 });
 
 test("GET menu", async () =>{
