@@ -1,8 +1,21 @@
 const request = require('supertest');
 const app = require('../service');
+const { Role, DB } = require('../database/database.js');
 
-const testUser = { name: 'pizza diner', email: 'reg@test.com', password: 'a' };
-const admin = {email: 'a@jwt.com', password: 'admin'};
+const testUser = { name: 'pizza diner', email: 'reg@test.com', password: 'a' }
+
+function randomName() {
+  return Math.random().toString(36).substring(2, 12);
+}
+
+async function createAdminUser() {
+  let user = { password: 'toomanysecrets', roles: [{ role: Role.Admin }] };
+  user.name = randomName();
+  user.email = user.name + '@admin.com';
+
+  user = await DB.addUser(user);
+  return { ...user, password: 'toomanysecrets' };
+}
 
 let adminToken;
 let token;
@@ -17,9 +30,11 @@ beforeAll(async () =>{
     token = registerRes.body.token;
     expect(token).toBeDefined();
 
+    const adminUser = await createAdminUser();
+
     const adminLoginRes = await request(app)
     .put('/api/auth')
-    .send(admin);
+    .send(adminUser);
 
   adminToken = adminLoginRes.body.token;
   expect(adminToken).toBeDefined();
