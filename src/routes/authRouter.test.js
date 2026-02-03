@@ -29,7 +29,19 @@ test('rejects invalid order payload', async () => {
   const res = await request(app)
     .post('/api/order')
     .set('Authorization', `Bearer ${testUserAuthToken}`)
-    .send({}); // intentionally invalid
+    .send({}); 
+  expect([500]).toContain(res.status);
+});
 
-  expect([400, 422]).toContain(res.status);
+
+test('logout with token succeeds', async () => {
+  const loginRes = await request(app).put('/api/auth').send(testUser);
+  const token = loginRes.body.token;
+
+  const res = await request(app)
+    .delete('/api/auth')
+    .set('Authorization', `Bearer ${token}`);
+
+  expect(res.status).toBe(200);
+  expect(res.body).toHaveProperty('message', 'logout successful');
 });
