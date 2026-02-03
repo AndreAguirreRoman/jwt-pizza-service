@@ -1,8 +1,29 @@
 const request = require('supertest');
 const app = require('../service');
+const { DB, Role } = require('../database/database.js');
 
 const testUser = { name: 'pizza diner', email: 'reg@test.com', password: 'a' };
-const admin = {email: 'a@jwt.com', password: 'admin'};
+
+function randomName() {
+  return Math.random().toString(36).substring(2, 12);
+}
+
+
+async function createAdminAndLogin() {
+  const password = 'password';
+  const name = randomName();
+  const email = `${name}@admin.com`;
+
+  await DB.addUser({ name, email, password, roles: [{ role: Role.Admin }] });
+
+  const loginRes = await request(app).put('/api/auth').send({ email, password });
+  expect(loginRes.status).toBe(200);
+  expect(loginRes.body.token).toBeDefined();
+
+
+  return { adminToken: loginRes.body.token, adminEmail: email };
+}
+
 
 let adminToken;
 let token;
@@ -10,42 +31,44 @@ let token;
 let franchiseId;
 let storeId;
 let menuId;
+beforeAll(async () => {
 
-beforeAll(async () =>{
-    testUser.email = Math.random().toString(36).substring(2,12) + '@test.com';
-    const registerRes = await request(app).post('/api/auth').send(testUser);
-    token = registerRes.body.token;
-    expect(token).toBeDefined();
+  testUser.email = randomName() + '@test.com';
+  const registerRes = await request(app).post('/api/auth').send(testUser);
+  expect(registerRes.status).toBe(200);
+  token = registerRes.body.token;
+  expect(token).toBeDefined();
 
-    const adminLoginRes = await request(app)
-    .put('/api/auth')
-    .send(admin);
-
-  adminToken = adminLoginRes.body.token;
-  expect(adminToken).toBeDefined();
-
+  const adminAuth = await createAdminAndLogin();
+  adminToken = adminAuth.adminToken;
+  const adminEmail = adminAuth.adminEmail;
 
   const menuRes = await request(app)
     .put('/api/order/menu')
     .set('Authorization', `Bearer ${adminToken}`)
     .send({ title: 'TestPizza', description: 't', image: 'x.png', price: 0.01 });
 
+  expect(menuRes.status).toBe(200);
   const last = menuRes.body[menuRes.body.length - 1];
   menuId = last.id;
 
   const franchiseRes = await request(app)
     .post('/api/franchise')
     .set('Authorization', `Bearer ${adminToken}`)
-    .send({ name: `Fr-${Date.now()}`, admins: [{ email: 'a@jwt.com' }] });
+    .send({ name: `Fr-${Date.now()}`, admins: [{ email: adminEmail }] });
 
+  expect(franchiseRes.status).toBe(200);
   franchiseId = franchiseRes.body.id;
+  expect(franchiseId).toBeDefined();
 
   const storeRes = await request(app)
     .post(`/api/franchise/${franchiseId}/store`)
     .set('Authorization', `Bearer ${adminToken}`)
     .send({ name: `S-${Date.now()}` });
 
+  expect(storeRes.status).toBe(200);
   storeId = storeRes.body.id;
+  expect(storeId).toBeDefined();
 });
 
 test("GET menu", async () =>{
