@@ -17,6 +17,7 @@ async function createAdminUser() {
   return { ...user, password: 'toomanysecrets' };
 }
 let adminToken;
+let adminId;
 let token;
 
 let franchiseeEmail;
@@ -33,6 +34,7 @@ beforeAll(async () => {
     let admin = await createAdminUser();
     const adminLoginRes = await request(app).put('/api/auth').send({email: admin.email, password: admin.password});
     adminToken = adminLoginRes.body.token;
+    adminId = admin.id;
     expect(adminToken).toBeDefined();
 
     const franchiseRes = await request(app)
@@ -79,6 +81,20 @@ test("GET franchises", async () =>{
     expect(res.status).toBe(200);
 
 })
+
+
+test('GET franchises for user', async () => {
+
+  const res = await request(app)
+    .get(`/api/franchise/${adminId}`)
+    .set('Authorization', `Bearer ${adminToken}`);
+
+  expect(res.status).toBe(200);
+  expect(Array.isArray(res.body)).toBe(true);
+  expect(res.body.length).toBe(1);
+  expect(res.body[0]).toHaveProperty('name');
+});
+
 
 test('DELETE store non-admin', async () => {
   const res = await request(app)
