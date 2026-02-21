@@ -95,4 +95,5 @@ test('admin can delete a user', async () => {
     .set('Authorization', 'Bearer ' + adminToken);
 
   expect(del.status).toBe(200);
+  console.log('Admin Token is:', adminToken);
 });
