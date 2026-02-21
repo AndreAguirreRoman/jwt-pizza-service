@@ -41,3 +41,61 @@ test('UPDATE user unauthorized', async () => {
   .send({ name: newName, email: testUser.email });;
   expect(res.status).toBe(403);
 });
+
+test('list users unauthorized', async () => {
+  const listUsersRes = await request(app).get('/api/user');
+  expect(listUsersRes.status).toBe(401);
+});
+
+test('list users', async () => {
+  const [user, userToken] = await registerUser(request(app));
+  const listUsersRes = await request(app)
+    .get('/api/user')
+    .set('Authorization', 'Bearer ' + userToken);
+  expect(listUsersRes.status).toBe(200);
+});
+
+async function registerUser(service) {
+  const testUser = {
+    name: 'pizza diner',
+    email: `${randomName()}@test.com`,
+    password: 'a',
+  };
+  const registerRes = await service.post('/api/auth').send(testUser);
+  registerRes.body.user.password = testUser.password;
+
+  return [registerRes.body.user, registerRes.body.token];
+}
+
+function randomName() {
+  return Math.random().toString(36).substring(2, 12);
+}
+
+test('delete user unauthorized', async () => {
+  const res = await request(app).delete('/api/user/1');
+  expect(res.status).toBe(401);
+});
+
+test('delete user forbidden for non-admin', async () => {
+  const [user, token] = await registerUser(request(app)); // diner
+  const res = await request(app)
+    .delete(`/api/user/${user.id}`)
+    .set('Authorization', 'Bearer ' + token);
+  expect(res.status).toBe(403);
+});
+
+test('admin can delete a user', async () => {
+  const [victim] = await registerUser(request(app));
+
+  const adminLogin = await request(app).put('/api/auth').send({ email: 'a@jwt.com', password: 'admin' });
+  const adminToken = adminLogin.body.token;
+
+  const del = await request(app)
+    .delete(`/api/user/${victim.id}`)
+    .set('Authorization', 'Bearer ' + adminToken);
+
+  expect(del.status).toBe(200);
+
+  const loginVictim = await request(app).put('/api/auth').send({ email: victim.email, password: 'a' });
+  expect(loginVictim.status).toBe(404);
+});
