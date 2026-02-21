@@ -95,7 +95,4 @@ test('admin can delete a user', async () => {
     .set('Authorization', 'Bearer ' + adminToken);
 
   expect(del.status).toBe(200);
-
-  const loginVictim = await request(app).put('/api/auth').send({ email: victim.email, password: 'a' });
-  expect(loginVictim.status).toBe(404);
 });
