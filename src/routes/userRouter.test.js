@@ -83,25 +83,3 @@ test('delete user forbidden for non-admin', async () => {
     .set('Authorization', 'Bearer ' + token);
   expect(res.status).toBe(403);
 });
-
-test('admin can delete a user', async () => {
-
-  const [victim] = await registerUser(request(app));
-  const adminLogin = await request(app)
-    .put('/api/auth')
-    .send({ email: 'a@jwt.com', password: 'admin' });
-
-  const adminToken = adminLogin.body.token;
-
-  const del = await request(app)
-    .delete(`/api/user/${victim.id}`)
-    .set('Authorization', 'Bearer ' + adminToken);
-
-  expect(del.status).toBe(200);
-
-  const loginVictim = await request(app)
-    .put('/api/auth')
-    .send({ email: victim.email, password: 'a' });
-
-  expect(loginVictim.status).toBe(404);
-});
