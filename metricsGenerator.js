@@ -1,4 +1,4 @@
-const config = require('./config2');
+const config = require('./src/config');
 
 let requests = 0;
 let latency = 0;
