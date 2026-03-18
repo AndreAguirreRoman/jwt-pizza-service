@@ -12,11 +12,25 @@ let latencySamples = 0;
 
 let timerStarted = false;
 
-let pizzaOrders = 0;
+
 let activeUsers = new Set();
 
-function incrementPizzaOrders() {
-  pizzaOrders++;
+let pizzaOrders = 0;
+let pizzaFailures = 0;
+let pizzaRevenue = 0;
+let pizzaLatencyTotal = 0;
+let pizzaLatencySamples = 0;
+
+function pizzaPurchase(success, latency, price) {
+  pizzaLatencyTotal += latency;
+  pizzaLatencySamples++;
+
+  if (success) {
+    pizzaOrders++;
+    pizzaRevenue += price;
+  } else {
+    pizzaFailures++;
+  }
 }
 
 function getCpuUsagePercentage() {
@@ -146,18 +160,26 @@ function sendMetricsPeriodically(period = 5000) {
     sendMetricToGrafana('http_requests_post', postCount, 'sum', '1');
     sendMetricToGrafana('http_requests_put', putCount, 'sum', '1');
     sendMetricToGrafana('http_requests_delete', deleteCount, 'sum', '1');
-    sendMetricToGrafana('pizza_orders_total', pizzaOrders, 'sum', '1');
 
     sendMetricToGrafana('http_request_latency_avg', avgLatency, 'gauge', 'ms');
+
+    sendMetricToGrafana('pizza_orders_total', pizzaOrders, 'sum', '1');
+    sendMetricToGrafana('pizza_failures_total', pizzaFailures, 'sum', '1');
+    sendMetricToGrafana('pizza_revenue_total', pizzaRevenue, 'sum', '1');
+
+    const avgPizzaLatency = pizzaLatencySamples === 0 ? 0 : pizzaLatencyTotal / pizzaLatencySamples;
+    sendMetricToGrafana('pizza_latency_avg', avgPizzaLatency, 'gauge', 'ms');
 
     activeUsers.clear();
   }, period);
 }
 
-sendMetricsPeriodically();
+if (process.env.NODE_ENV !== 'test') {
+  sendMetricsPeriodically();
+}
 
 module.exports = {
   requestTracker,
   sendMetricsPeriodically,
-  incrementPizzaOrders,
+  pizzaPurchase,
 };
