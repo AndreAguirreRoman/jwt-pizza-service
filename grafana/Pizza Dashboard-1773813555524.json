@@ -1,0 +1,1045 @@
+{
+  "annotations": {
+    "list": [
+      {
+        "builtIn": 1,
+        "datasource": {
+          "type": "grafana",
+          "uid": "-- Grafana --"
+        },
+        "enable": true,
+        "hide": true,
+        "iconColor": "rgba(0, 211, 255, 1)",
+        "name": "Annotations & Alerts",
+        "type": "dashboard"
+      }
+    ]
+  },
+  "editable": true,
+  "fiscalYearStartMonth": 0,
+  "graphTooltip": 0,
+  "links": [],
+  "panels": [
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "grafanacloud-prom"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          },
+          "unit": "currencyBTC"
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 7,
+        "w": 3,
+        "x": 0,
+        "y": 0
+      },
+      "id": 7,
+      "options": {
+        "colorMode": "value",
+        "graphMode": "area",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "showPercentChange": false,
+        "textMode": "auto",
+        "wideLayout": true
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "pizza_revenue_total{job=\"jwt-pizza-service\"}",
+          "legendFormat": "Total Revenue",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(pizza_revenue_total{job=\"jwt-pizza-service\"}[1m]))",
+          "instant": false,
+          "legendFormat": "Revenue per minute",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Revenue",
+      "type": "stat"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "grafanacloud-prom"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "stepAfter",
+            "lineWidth": 1,
+            "pointSize": 1,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 10,
+        "x": 3,
+        "y": 0
+      },
+      "id": 4,
+      "interval": "1",
+      "options": {
+        "annotations": {
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "right",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
+      "targets": [
+        {
+          "editorMode": "builder",
+          "expr": "sum(rate(http_requests_get_total{job=\"jwt-pizza-service\"}[1m]))",
+          "interval": "",
+          "legendFormat": "GET",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "editorMode": "builder",
+          "expr": "sum(rate(http_requests_post_total{job=\"jwt-pizza-service\"}[1m]))",
+          "instant": false,
+          "legendFormat": "POST",
+          "range": true,
+          "refId": "B"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(http_requests_put_total{job=\"jwt-pizza-service\"}[1m]))\n",
+          "instant": false,
+          "legendFormat": "PUT",
+          "range": true,
+          "refId": "C"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(http_requests_delete_total{job=\"jwt-pizza-service\"}[1m]))",
+          "instant": false,
+          "legendFormat": "DELETE",
+          "range": true,
+          "refId": "D"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(http_requests_total{job=\"jwt-pizza-service\"}[1m]))",
+          "instant": false,
+          "legendFormat": "TOTAL HTTPS",
+          "range": true,
+          "refId": "E"
+        }
+      ],
+      "title": "Total requests/min",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "grafanacloud-prom"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 5,
+        "x": 13,
+        "y": 0
+      },
+      "id": 8,
+      "options": {
+        "annotations": {
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "avg_over_time(http_request_latency_avg_milliseconds{job=\"jwt-pizza-service\"}[1m])",
+          "legendFormat": "HTTP Latency",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "HTTP LATENCY",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "grafanacloud-prom"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 25,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 13,
+        "w": 6,
+        "x": 18,
+        "y": 0
+      },
+      "id": 10,
+      "options": {
+        "annotations": {
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "avg_over_time(http_request_latency_avg_milliseconds{job=\"jwt-pizza-service\"}[1m])",
+          "legendFormat": "Pizza Creation Latency",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Pizza Creation Latency",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "grafanacloud-prom"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 3,
+        "x": 0,
+        "y": 7
+      },
+      "id": 5,
+      "options": {
+        "barShape": "flat",
+        "barWidthFactor": 0.5,
+        "effects": {
+          "barGlow": false,
+          "centerGlow": false,
+          "gradient": true
+        },
+        "endpointMarker": "point",
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "segmentCount": 1,
+        "segmentSpacing": 0.3,
+        "shape": "gauge",
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto",
+        "sparkline": true,
+        "textMode": "auto"
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
+      "targets": [
+        {
+          "editorMode": "builder",
+          "expr": "cpu_usage_percent{job=\"jwt-pizza-service\"}",
+          "legendFormat": "CPU",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "editorMode": "builder",
+          "expr": "memory_usage_percent{job=\"jwt-pizza-service\"}",
+          "instant": false,
+          "legendFormat": "Memory",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "CPU and Memory Usage",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "grafanacloud-prom"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "max": 4,
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 10,
+        "w": 10,
+        "x": 3,
+        "y": 8
+      },
+      "id": 3,
+      "interval": "1",
+      "options": {
+        "annotations": {
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "editorMode": "builder",
+          "expr": "active_users_ratio{job=\"jwt-pizza-service\"}",
+          "instant": false,
+          "legendFormat": "Active Users",
+          "range": true,
+          "refId": "A"
+        }
+      ],
+      "title": "Active Users",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "grafanacloud-prom"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "smooth",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 16,
+        "w": 11,
+        "x": 13,
+        "y": 13
+      },
+      "id": 6,
+      "options": {
+        "annotations": {
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "sum(rate(pizza_orders_total{job=\"jwt-pizza-service\"}[1m]))",
+          "legendFormat": "Pizza Purchases",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "editorMode": "code",
+          "expr": "sum(rate(pizza_failures_total{job=\"jwt-pizza-service\"}[1m]))",
+          "instant": false,
+          "legendFormat": "Pizza purchase failure",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "PIzza Purchases",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "grafanacloud-prom"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 11,
+        "w": 13,
+        "x": 0,
+        "y": 18
+      },
+      "id": 11,
+      "options": {
+        "annotations": {
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
+      "targets": [
+        {
+          "editorMode": "code",
+          "expr": "increase(auth_successes_total{job=\"jwt-pizza-service\"}[1m])",
+          "legendFormat": "Success",
+          "range": true,
+          "refId": "A"
+        },
+        {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "grafanacloud-prom"
+          },
+          "editorMode": "code",
+          "expr": "increase(auth_failures_total{job=\"jwt-pizza-service\"}[1m])",
+          "instant": false,
+          "legendFormat": "Failure",
+          "range": true,
+          "refId": "B"
+        }
+      ],
+      "title": "Authentications",
+      "type": "timeseries"
+    },
+    {
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "affgk5s0b8zcwc"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "thresholds"
+          },
+          "fieldMinMax": true,
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 29
+      },
+      "id": 2,
+      "options": {
+        "barShape": "flat",
+        "barWidthFactor": 0.5,
+        "effects": {
+          "barGlow": false,
+          "centerGlow": false,
+          "gradient": true
+        },
+        "endpointMarker": "point",
+        "minVizHeight": 75,
+        "minVizWidth": 75,
+        "orientation": "auto",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
+        },
+        "segmentCount": 1,
+        "segmentSpacing": 0.3,
+        "shape": "gauge",
+        "showThresholdLabels": false,
+        "showThresholdMarkers": true,
+        "sizing": "auto",
+        "sparkline": true,
+        "textMode": "auto"
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
+      "targets": [
+        {
+          "channel": "random-2s-stream",
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "affgk5s0b8zcwc"
+          },
+          "refId": "A",
+          "scenarioId": "live"
+        }
+      ],
+      "title": "Grafana Live",
+      "type": "gauge"
+    },
+    {
+      "datasource": {
+        "type": "grafana-testdata-datasource",
+        "uid": "affgk5s0b8zcwc"
+      },
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "axisBorderShow": false,
+            "axisCenteredZero": false,
+            "axisColorMode": "text",
+            "axisLabel": "",
+            "axisPlacement": "auto",
+            "barAlignment": 0,
+            "barWidthFactor": 0.6,
+            "drawStyle": "line",
+            "fillOpacity": 0,
+            "gradientMode": "none",
+            "hideFrom": {
+              "legend": false,
+              "tooltip": false,
+              "viz": false
+            },
+            "insertNulls": false,
+            "lineInterpolation": "linear",
+            "lineWidth": 1,
+            "pointSize": 5,
+            "scaleDistribution": {
+              "type": "linear"
+            },
+            "showPoints": "auto",
+            "showValues": false,
+            "spanNulls": false,
+            "stacking": {
+              "group": "A",
+              "mode": "none"
+            },
+            "thresholdsStyle": {
+              "mode": "off"
+            }
+          },
+          "mappings": [],
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": 0
+              },
+              {
+                "color": "red",
+                "value": 80
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "gridPos": {
+        "h": 8,
+        "w": 12,
+        "x": 12,
+        "y": 37
+      },
+      "id": 1,
+      "options": {
+        "annotations": {
+          "multiLane": false
+        },
+        "legend": {
+          "calcs": [],
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "hideZeros": false,
+          "mode": "single",
+          "sort": "none"
+        }
+      },
+      "pluginVersion": "13.0.0-22843068776.patch2",
+      "targets": [
+        {
+          "datasource": {
+            "type": "grafana-testdata-datasource",
+            "uid": "affgk5s0b8zcwc"
+          },
+          "refId": "A",
+          "scenarioId": "random_walk",
+          "seriesCount": 1
+        }
+      ],
+      "title": "New panel",
+      "type": "timeseries"
+    }
+  ],
+  "preload": false,
+  "schemaVersion": 42,
+  "tags": [],
+  "templating": {
+    "list": []
+  },
+  "time": {
+    "from": "now-6h",
+    "to": "now"
+  },
+  "timepicker": {},
+  "timezone": "browser",
+  "title": "Pizza Dashboard",
+  "weekStart": "",
+  "version": 40,
+  "uid": "ansx4v8",
+  "id": 4232187984912384
+}
