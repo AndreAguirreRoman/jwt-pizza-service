@@ -38,9 +38,8 @@ function requestTracker(req, res, next) {
   requestCount++;
   if (req.user && req.user.id) {
     activeUsers.add(`user-${req.user.id}`);
-    } else {
-    activeUsers.add(`ip-${req.ip}`);
-    }
+  }
+
   if (req.method === 'GET') {
     getCount++;
   } else if (req.method === 'POST') {
