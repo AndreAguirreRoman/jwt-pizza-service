@@ -97,7 +97,7 @@ function sendMetricToGrafana(metricName, metricValue, type, unit) {
                 [type]: {
                   dataPoints: [
                     {
-                      asDouble: Number(metricValue),
+                      asInt: Number(Math.round(metricValue)),
                       timeUnixNano: String(Date.now() * 1000000),
                     },
                   ],
