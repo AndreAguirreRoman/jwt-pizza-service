@@ -21,6 +21,10 @@ let pizzaRevenue = 0;
 let pizzaLatencyTotal = 0;
 let pizzaLatencySamples = 0;
 
+let authAttempts = 0;
+let authSuccesses = 0;
+let authFailures = 0;
+
 function pizzaPurchase(success, latency, price) {
   pizzaLatencyTotal += latency;
   pizzaLatencySamples++;
@@ -31,6 +35,16 @@ function pizzaPurchase(success, latency, price) {
   } else {
     pizzaFailures++;
   }
+}
+
+function authAttempt(success){
+    authAttempts++;
+
+    if (success) {
+        authSuccesses++;
+    } else {
+        authFailures++;
+    }
 }
 
 function getCpuUsagePercentage() {
@@ -97,7 +111,7 @@ function sendMetricToGrafana(metricName, metricValue, type, unit) {
                 [type]: {
                   dataPoints: [
                     {
-                      asInt: Number(Math.round(metricValue)),
+                      asDouble: Number(metricValue),
                       timeUnixNano: String(Date.now() * 1000000),
                     },
                   ],
@@ -163,6 +177,10 @@ function sendMetricsPeriodically(period = 5000) {
 
     sendMetricToGrafana('http_request_latency_avg', avgLatency, 'gauge', 'ms');
 
+    sendMetricToGrafana('auth_attempts_total', authAttempts, 'sum', '1');
+    sendMetricToGrafana('auth_successes_total', authSuccesses, 'sum', '1');
+    sendMetricToGrafana('auth_failures_total', authFailures, 'sum', '1');
+
     sendMetricToGrafana('pizza_orders_total', pizzaOrders, 'sum', '1');
     sendMetricToGrafana('pizza_failures_total', pizzaFailures, 'sum', '1');
     sendMetricToGrafana('pizza_revenue_total', pizzaRevenue, 'sum', '1');
@@ -182,4 +200,5 @@ module.exports = {
   requestTracker,
   sendMetricsPeriodically,
   pizzaPurchase,
+  authAttempt
 };
