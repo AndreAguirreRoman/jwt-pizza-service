@@ -13,6 +13,7 @@ let latencySamples = 0;
 let timerStarted = false;
 
 let pizzaOrders = 0;
+let activeUsers = new Set();
 
 function incrementPizzaOrders() {
   pizzaOrders++;
@@ -35,7 +36,9 @@ function requestTracker(req, res, next) {
   const start = Date.now();
 
   requestCount++;
-
+    if (req.user && req.user.id) {
+    activeUsers.add(req.user.id);
+    }
   if (req.method === 'GET') {
     getCount++;
   } else if (req.method === 'POST') {
@@ -135,6 +138,7 @@ function sendMetricsPeriodically(period = 5000) {
 
     sendMetricToGrafana('cpu_usage', getCpuUsagePercentage(), 'gauge', '%');
     sendMetricToGrafana('memory_usage', getMemoryUsagePercentage(), 'gauge', '%');
+    sendMetricToGrafana('active_users', activeUsers.size, 'gauge', '1');
 
     sendMetricToGrafana('http_requests_total', requestCount, 'sum', '1');
     sendMetricToGrafana('http_requests_get', getCount, 'sum', '1');
@@ -144,10 +148,11 @@ function sendMetricsPeriodically(period = 5000) {
     sendMetricToGrafana('pizza_orders_total', pizzaOrders, 'sum', '1');
 
     sendMetricToGrafana('http_request_latency_avg', avgLatency, 'gauge', 'ms');
+
+    activeUsers.clear();
   }, period);
 }
 
-// start periodic system/reporting automatically when file is loaded
 sendMetricsPeriodically();
 
 module.exports = {
