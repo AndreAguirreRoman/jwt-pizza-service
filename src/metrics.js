@@ -12,6 +12,12 @@ let latencySamples = 0;
 
 let timerStarted = false;
 
+let pizzaOrders = 0;
+
+function incrementPizzaOrders() {
+  pizzaOrders++;
+}
+
 function getCpuUsagePercentage() {
   const cpuUsage = os.loadavg()[0] / os.cpus().length;
   return Number((cpuUsage * 100).toFixed(2));
@@ -135,6 +141,7 @@ function sendMetricsPeriodically(period = 5000) {
     sendMetricToGrafana('http_requests_post', postCount, 'sum', '1');
     sendMetricToGrafana('http_requests_put', putCount, 'sum', '1');
     sendMetricToGrafana('http_requests_delete', deleteCount, 'sum', '1');
+    sendMetricToGrafana('pizza_orders_total', pizzaOrders, 'sum', '1');
 
     sendMetricToGrafana('http_request_latency_avg', avgLatency, 'gauge', 'ms');
   }, period);
@@ -146,4 +153,5 @@ sendMetricsPeriodically();
 module.exports = {
   requestTracker,
   sendMetricsPeriodically,
+  incrementPizzaOrders,
 };
