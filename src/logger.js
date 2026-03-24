@@ -25,6 +25,7 @@ class Logger {
   };
 
   log(level, type, logData) {
+    if (process.env.NODE_ENV === 'test') return;
     const labels = { 
       component: config.source, 
       level: level, 
