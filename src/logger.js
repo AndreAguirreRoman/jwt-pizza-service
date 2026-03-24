@@ -1,4 +1,4 @@
-const config = require('./config');
+const config = require('../loggingExample/config');
 
 class Logger {
   httpLogger = (req, res, next) => {
