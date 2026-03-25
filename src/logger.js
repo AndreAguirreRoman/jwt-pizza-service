@@ -54,9 +54,9 @@ class Logger {
     return logDataToFilter
       .replace(/\\"password\\":\s*\\"[^"]*\\"/g, '\\"password\\": \\"*****\\"')
       .replace(/\\"authorization\\":\s*\\"[^"]*\\"/g, '\\"authorization\\": \\"*****\\"')
-      .replace(/\\"token\\":\s*\\"[^"]*\\"/g, '\\"password\\": \\"*****\\"')
-      .replace(/\\"jwt\\":\s*\\"[^"]*\\"/g, '\\"password\\": \\"*****\\"')
-      .replace(/\\"apiKey\\":\s*\\"[^"]*\\"/g, '\\"password\\": \\"*****\\"');
+      .replace(/\\"token\\":\s*\\"[^"]*\\"/g, '\\"token\\": \\"*****\\"')
+      .replace(/\\"jwt\\":\s*\\"[^"]*\\"/g, '\\"jwt\\": \\"*****\\"')
+      .replace(/\\"apiKey\\":\s*\\"[^"]*\\"/g, '\\"apiKey\\": \\"*****\\"');
   }
 
   sendLogToGrafana(event) {
