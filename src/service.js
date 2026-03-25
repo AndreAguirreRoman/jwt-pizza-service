@@ -55,4 +55,12 @@ app.use((err, req, res, next) => {
   next();
 });
 
+process.on('uncaughtException', (err) => {
+  logger.log('error', 'exception', { message: err.message, stack: err.stack });
+});
+
+process.on('unhandledRejection', (err) => {
+  logger.log('error', 'exception', { message: err?.message, stack: err?.stack });
+});
+
 module.exports = app;

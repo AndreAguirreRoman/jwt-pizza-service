@@ -50,8 +50,13 @@ class Logger {
   }
 
   sanitize(logData) {
-    logData = JSON.stringify(logData);
-    return logData.replace(/\\"password\\":\s*\\"[^"]*\\"/g, '\\"password\\": \\"*****\\"');
+    let logDataToFilter = JSON.stringify(logData);
+    return logDataToFilter
+      .replace(/\\"password\\":\s*\\"[^"]*\\"/g, '\\"password\\": \\"*****\\"')
+      .replace(/\\"authorization\\":\s*\\"[^"]*\\"/g, '\\"authorization\\": \\"*****\\"')
+      .replace(/\\"token\\":\s*\\"[^"]*\\"/g, '\\"password\\": \\"*****\\"')
+      .replace(/\\"jwt\\":\s*\\"[^"]*\\"/g, '\\"password\\": \\"*****\\"')
+      .replace(/\\"apiKey\\":\s*\\"[^"]*\\"/g, '\\"password\\": \\"*****\\"');
   }
 
   sendLogToGrafana(event) {
