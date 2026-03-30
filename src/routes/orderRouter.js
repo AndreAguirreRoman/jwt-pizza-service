@@ -101,8 +101,8 @@ orderRouter.post(
     logger.log('info', 'factory', {
       url: `${config.factory.url}/api/order`,
       method: 'POST',
-      requestBody: factoryRequestBody,
-      responseBody: j,
+      reqBody: factoryRequestBody,
+      resBody: j,
       statusCode: r.status,
     });
 

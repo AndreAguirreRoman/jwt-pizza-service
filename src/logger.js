@@ -56,7 +56,8 @@ class Logger {
       .replace(/\\"authorization\\":\s*\\"[^"]*\\"/g, '\\"authorization\\": \\"*****\\"')
       .replace(/\\"token\\":\s*\\"[^"]*\\"/g, '\\"token\\": \\"*****\\"')
       .replace(/\\"jwt\\":\s*\\"[^"]*\\"/g, '\\"jwt\\": \\"*****\\"')
-      .replace(/\\"apiKey\\":\s*\\"[^"]*\\"/g, '\\"apiKey\\": \\"*****\\"');
+      .replace(/\\"apiKey\\":\s*\\"[^"]*\\"/g, '\\"apiKey\\": \\"*****\\"')
+      .replace(/Bearer\s+[A-Za-z0-9\-._~+/]+=*/gi, 'Bearer *****');;
   }
 
   sendLogToGrafana(event) {

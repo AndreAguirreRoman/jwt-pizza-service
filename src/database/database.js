@@ -345,11 +345,11 @@ class DB {
     try {
       const [results] = await connection.execute(sql, params);
     
-      logger.log('info', 'db', { query: sql, params: params });
+      logger.log('info', 'db', { query: sql, queryParams: params });
       
       return results;
     } catch (error) {
-      logger.log('error', 'db', { query: sql, params: params, error: error.message });
+      logger.log('error', 'db', { query: sql, queryParams: params, error: error.message });
       throw error;
     }
   }
