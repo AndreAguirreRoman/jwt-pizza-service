@@ -37,7 +37,7 @@ test('rejects invalid order payload', async () => {
     .post('/api/order')
     .set('Authorization', `Bearer ${testUserAuthToken}`)
     .send({}); 
-  expect([500]).toContain(res.status);
+  expect([400]).toContain(res.status);
 });
 
 
