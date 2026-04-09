@@ -82,6 +82,9 @@ orderRouter.post(
     const start = Date.now();
 
     const orderReq = req.body;
+    if (!orderReq.items || !Array.isArray(orderReq.items) || orderReq.items.length === 0) {
+      throw new StatusCodeError('invalid order', 400);
+    }
     const order = await DB.addDinerOrder(req.user, orderReq);
 
     const factoryRequestBody = {
