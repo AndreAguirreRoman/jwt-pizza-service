@@ -191,6 +191,66 @@ class DB {
     }
   }
 
+
+  async addDinerOrder(user, order) {
+    const connection = await this.getConnection();
+    try {
+      if (!order.franchiseId || !order.storeId || !Array.isArray(order.items) || order.items.length === 0) {
+        throw new StatusCodeError('invalid order', 400);
+      }
+
+      const orderResult = await this.query(
+        connection,
+        `INSERT INTO dinerOrder (dinerId, franchiseId, storeId, date) VALUES (?, ?, ?, now())`,
+        [user.id, order.franchiseId, order.storeId]
+      );
+
+      const orderId = orderResult.insertId;
+      const trustedItems = [];
+
+      for (const item of order.items) {
+        if (!item.menuId) {
+          throw new StatusCodeError('invalid menu item', 400);
+        }
+
+        const menuRows = await this.query(
+          connection,
+          `SELECT id, description, price FROM menu WHERE id=?`,
+          [item.menuId]
+        );
+
+        if (menuRows.length === 0) {
+          throw new StatusCodeError('invalid menu item', 400);
+        }
+
+        const menuItem = menuRows[0];
+
+        await this.query(
+          connection,
+          `INSERT INTO orderItem (orderId, menuId, description, price) VALUES (?, ?, ?, ?)`,
+          [orderId, menuItem.id, menuItem.description, menuItem.price]
+        );
+
+        trustedItems.push({
+          menuId: menuItem.id,
+          description: menuItem.description,
+          price: menuItem.price,
+        });
+      }
+
+      return {
+        id: orderId,
+        franchiseId: order.franchiseId,
+        storeId: order.storeId,
+        items: trustedItems,
+      };
+    } finally {
+      connection.end();
+    }
+  }
+
+
+
   async createFranchise(franchise) {
     const connection = await this.getConnection();
     try {
