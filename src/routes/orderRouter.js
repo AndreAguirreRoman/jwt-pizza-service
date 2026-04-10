@@ -85,6 +85,9 @@ orderRouter.post(
     if (!orderReq.items || !Array.isArray(orderReq.items) || orderReq.items.length === 0) {
       throw new StatusCodeError('invalid order', 400);
     }
+    if (!orderReq.items || !Array.isArray(orderReq.items) || orderReq.items.length > 10) {
+      throw new StatusCodeError('We are sorry! Only 10 pizzas per order!', 400);
+    }
     const order = await DB.addDinerOrder(req.user, orderReq);
 
     const factoryRequestBody = {
