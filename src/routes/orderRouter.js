@@ -88,6 +88,19 @@ orderRouter.post(
     if (!orderReq.items || !Array.isArray(orderReq.items) || orderReq.items.length > 10) {
       throw new StatusCodeError('We are sorry! Only 10 pizzas per order!', 400);
     }
+
+    const franchises = await DB.getFranchises();
+    
+    const validFranchise = franchises.find(f => f.id === orderReq.franchiseId);
+    if (!validFranchise) {
+      throw new StatusCodeError('Invalid Franchise ID', 400);
+    }
+
+    const validStore = validFranchise.stores.find(s => s.id === orderReq.storeId);
+    if (!validStore) {
+      throw new StatusCodeError('Invalid Store ID for this Franchise', 400);
+    }
+    
     const order = await DB.addDinerOrder(req.user, orderReq);
 
     const factoryRequestBody = {
