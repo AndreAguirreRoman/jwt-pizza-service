@@ -94,7 +94,7 @@ userRouter.get(
   asyncHandler(async (req, res) => {
 
     if (!req.user.isRole(Role.Admin)){
-      throw new StatusCodeError("Hold your horses! You have no permission")
+      return res.status(403).json({message:"Hold your horses! You have no permission"});
     }
 
     const page = parseInt(req.query.page) || 1;
