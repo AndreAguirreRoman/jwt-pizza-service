@@ -54,7 +54,7 @@ app.use((err, req, res, next) => {
   logger.log('error', 'exception', { message: err.message, stack: err.stack });
 
   if (err.statusCode) {
-    return res.status(err.statusCode).json({ message: "HANDLER REACHED" });
+    return res.status(err.statusCode).json({ message: err.message });
   }
   
   return res.status(500).json({message: "Internal Error"})
