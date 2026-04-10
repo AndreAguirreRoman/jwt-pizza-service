@@ -93,10 +93,6 @@ userRouter.get(
   authRouter.authenticateToken,
   asyncHandler(async (req, res) => {
 
-    if (!req.user.isRole(Role.Admin)){
-      return res.status(403).json({message:"Hold your horses! You have no permission"});
-    }
-
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
     const nameFilter = req.query.name || '*';
