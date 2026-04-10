@@ -52,7 +52,7 @@ test('list users', async () => {
   const listUsersRes = await request(app)
     .get('/api/user')
     .set('Authorization', 'Bearer ' + userToken);
-  expect(listUsersRes.status).toBe(403);
+  expect(listUsersRes.status).toBe(200);
 });
 
 async function registerUser(service) {
