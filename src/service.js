@@ -49,7 +49,8 @@ app.use('*', (req, res) => {
   });
 });
 
-app.use((err, req, res,) => {
+app.use((err, req, res, next) => {
+  void next;
   logger.log('error', 'exception', { message: err.message, stack: err.stack });
   if (err.statusCode) {
     return res.status(err.statusCode).json({ message: err.message });
